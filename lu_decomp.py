@@ -5,7 +5,7 @@
 
 import numpy as np
 
-def lu_decomp(A):
+def lud(A):
     
     rows = len(A)
     columns = len(A[0])
@@ -44,7 +44,7 @@ def lu_decomp(A):
                   
                 U[i][j] = A[i][j] - sum_U
                 
-                print("U " + str(i) + " " + str(j) + " = " + str(A[i][j]) + " - " + str(sum_U) + " = " + str(U[i][j]))
+                #print("U " + str(i) + " " + str(j) + " = " + str(A[i][j]) + " - " + str(sum_U) + " = " + str(U[i][j]))
                 
             else:
                 
@@ -72,25 +72,44 @@ def lu_decomp(A):
                 
                 L[i][j]=(A[i][j] - sum_L)/U[j][j]
                 
-                print("L " + str(i) + " " + str(j) + " = (" + str(A[i][j]) + " - " + str(sum_L) + ")/" + str(U[j][j]) + " = " + str(L[i][j]))
+                #print("L " + str(i) + " " + str(j) + " = (" + str(A[i][j]) + " - " + str(sum_L) + ")/" + str(U[j][j]) + " = " + str(L[i][j]))
                 
             else:
                 
                 continue
             
-    
+    print(np.matmul(L,U))
     #perform validation check using numpy LU decomposition 
-    validation=np.matmul(L,U)
-    if validation==A:
-        print("The lower matrix is" + L)
-        print("The upper matrix is" +U)
-        return L,U
-    else:
-        print("Something went wrong")
-    
-A=[[3,1,0,0,0],[3,9,4,0,0],[0,8,20,10,0],[0,0,-22,31,-25],[0,0,0,-35,61]]
+    print("This is the lower matrix")
+    print(L)
+    print("This is the upper matrix" )
+    print(U)
+    return(U,L)
 
-lu_decomp(A)
+
+
+def determinant(U):
+    #this function uses LU decomposition to find the determinant of a matrix
+    #as the det is the multiplicative sum of the diagonal of U
+    diagonal=1
+    for x in range(len(U)):
+        diagonal = diagonal * U[x][x]
+    print("This is the determinant " + str(diagonal))
+    
+
+def substitution(U,L,b):
+    #this function will use forward and backward substitution for the 
+    #x vector 
+    
+    y=[0 for r in range(len(U))]
+    for i in range(len(y)):
+        y[i]=(b[i]-y.dotProduct(U[i]))/U[i][i]
+    
+    return y
+    
+    
+
+
 
 
     
