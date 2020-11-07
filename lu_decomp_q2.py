@@ -72,7 +72,6 @@ def lud(A):
                 
                 L[i][j]=(A[i][j] - sum_L)/U[j][j]
                 
-                #print("L " + str(i) + " " + str(j) + " = (" + str(A[i][j]) + " - " + str(sum_L) + ")/" + str(U[j][j]) + " = " + str(L[i][j]))
                 
             else:
                 
@@ -112,7 +111,8 @@ def substitution(U,L,b):
         x[i]=(y[i]-np.dot(x,U[i]))/U[i][i]
     
     
-    print("The solution is" + str(x))
+    print("The solution is")
+    print(x)
     return x
     
 
