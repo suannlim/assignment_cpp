@@ -79,10 +79,10 @@ def lud(A):
             
     #print(np.matmul(L,U))
     #perform validation check using numpy LU decomposition 
-    print("This is the lower matrix")
-    print(L)
-    print("This is the upper matrix" )
-    print(U)
+    #print("This is the lower matrix")
+    #print(L)
+    #print("This is the upper matrix" )
+    #print(U)
     return(U,L)
 
 
