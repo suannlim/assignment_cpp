@@ -10,11 +10,11 @@ import lu_decomp_q2 as lu
 
 
 def lagrange_poly(X,Y):
-    
+    """
     #the lagrange function will take a set of data to find the polynomial 
     #that fits the points and outputs a set of Y values of a lin.space x
     #range of values that are appropriate to the given X
-    
+    """
     N=len(X)
     
     #create a linearly spaced new set of X values

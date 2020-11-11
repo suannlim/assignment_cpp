@@ -4,9 +4,12 @@
 
 def float_point_rounding(x):
     
+    """
     #the while loops keeps printing the given input value with more decimal
     #places ending in 1 until it can no longer be extended and is equal 
     #to the original value
+    
+    """
     y=0
     counter=0
     while x!=y:

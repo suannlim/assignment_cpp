@@ -14,25 +14,29 @@ of one and multiply with the fourier transform of the other
 
 """
 #define the two given functions
-def h(t):    
-    if t<=7 and t>=5:
-        function=4
-    if t<5 or t>7:
-        function=0
+def h(t):
+    function=np.array([])
+    for x in t:
+        if x<=7 and x>=5:
+            function=np.append(function,4)
+        if x<5 or x>7:
+            function=np.append(function,0)
     return function
 
 
 def g(t):
-    exponent=(-1*(t**2))/4
-    function=(1/math.sqrt(2*math.pi))*math.exp(exponent)
+    function=np.array([])
+    for x in t:
+        exponent=(-1*(x**2))/4
+        function=np.append(function,(1/math.sqrt(2*math.pi))*math.exp(exponent))
     return function
+
 
 #Number of sample points
 N=100
 
 #Sample spacing
-T=1.0/80
-X=np.arange(-10,100,N)
+X=np.arange(-10,100,1/N)
 print(X)
 
 #sample h function
@@ -43,13 +47,25 @@ print(h_time)
 g_time=g(X)
 
 #perform fourier transform
-h_fft=np.fft(h_time)
-g_fft=np.fft(g_time)
+
+h_fft=np.fft.fft(h_time)
+g_fft=np.fft.fft(g_time)
 
 #find the new x values(Frequency)
-xf=np.linspace(-10.0,1.0/(2.0*T),N/2)
+xf=(2*np.pi)/X
 
+plt.figure(1)
 plt.plot(xf,h_fft)
+plt.figure(2)
+plt.plot(xf,g_fft)
+
+#Find the fft convolution and the convolution
+fftConvo=h_fft*g_fft
+convo=np.fft.ifft(fftConvo)
+
+plt.figure(3)
+plt.plot(X,convo)
+
 
 
 

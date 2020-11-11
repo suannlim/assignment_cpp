@@ -44,8 +44,7 @@ def lud(A):
                   
                 U[i][j] = A[i][j] - sum_U
                 
-                #print("U " + str(i) + " " + str(j) + " = " + str(A[i][j]) + " - " + str(sum_U) + " = " + str(U[i][j]))
-                
+               
             else:
                 
                 continue
@@ -77,12 +76,6 @@ def lud(A):
                 
                 continue
             
-    #print(np.matmul(L,U))
-    #perform validation check using numpy LU decomposition 
-    #print("This is the lower matrix")
-    #print(L)
-    #print("This is the upper matrix" )
-    #print(U)
     return(U,L)
 
 
@@ -110,11 +103,10 @@ def substitution(U,L,b):
     for i in reversed(range(len(U))):
         x[i]=(y[i]-np.dot(x,U[i]))/U[i][i]
     
-    
-    print("The solution is")
-    print(x)
     return x
-    
+
+def column(matrix,i):
+    return [row[i] for row in matrix]
 
 
 
