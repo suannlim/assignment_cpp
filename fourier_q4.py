@@ -28,84 +28,58 @@ def g(t):
     function=np.array([])
     for x in t:
         exponent=(-1*(x**2))/4
-        function=np.append(function,(1/math.sqrt(2*math.pi))*math.exp(exponent))
+        function=np.append(function,\
+                           (1/math.sqrt(2*math.pi))*math.exp(exponent))
     return function
 
 
-"""
-In order to determine our sampling frequency, we have to ensure that it will
-lead to a Nyquist frequency that is larger than the max frequency of our
-function. As our input functions are not explicitly periodic, we assume that
-outside the time period, it repeats periodically, so we take T as the duration
-that our function is defined for
 
-As for the Gaussian, we have our range of values centered on 0 so N/2 values
-should be x<0 and N/2 values should be x>0 - so as to not shift our gaussian.
-As there is no specific frequency of the Gaussian function, we sample using an
-N that will give a frequency larger than that of h(t) but not too large so that
-it is too computationally taxing on the computer
+#first we need to ensure that our number of samples is in the form 2^m
+N=1000
+newN=pow(2, math.ceil(math.log(N)/math.log(2)))
 
-np.fft will automatically pad your sample value 
+#now we set our X array for our time space values
+X=np.linspace(-10,10,newN)
 
-how to find wmax????
-
-"""
-
-
-
-#Frequency of h(t)
-w_maxH=1/(7-5)
-
-
-#Number of sample points
-N=100
-
-#Sample spacing
-X=np.arange(-10,10,1/N)
-#print(X)
 
 #sample h function
 h_time=h(X)
-print(h_time)
+#pad the values of h
+h_pad=np.concatenate((h_time,np.zeros(newN)))
+
 #sample g function
 g_time=g(X)
-#perform fourier transform
+#pad the values of g
+g_pad=np.concatenate((g_time,np.zeros(newN)))
 
-h_fft=np.fft.fft(h_time)
-g_fft=np.fft.fft(g_time)
-
-#find the new x values(Frequency)
-xf=(2*np.pi)/X
-
-#fourier h(t)
-plt.figure(1)
-plt.title("Fourier h(t)")
-plt.xlabel("Frequency space")
-#plt.xlim(-10,10)
-plt.plot(xf,h_fft)
-
-#fourier g(t)
-plt.figure(2)
-plt.title("Fourier g(t)")
-plt.xlabel("Frequency space")
-#plt.xlim(-0.5,0.5)
-plt.plot(xf,g_fft)
+h_fft=np.fft.fft(h_pad)
+g_fft=np.fft.fft(g_pad)
 
 #Find the fft convolution and the convolution
 fftConvo=h_fft*g_fft
 convo=np.fft.ifft(fftConvo)
+#now we splice our convolution array to get the middle half
+start=round(len(convo)/4)
+end=round((len(convo)*3)/4)
+convoNew=convo[start:end]
 
-plt.figure(3)
+#normalise our convolution by our step size
+deltaT=X[1]-X[0]
+
+#plotting the convolution of g and h
+plt.figure(1)
 plt.title("Convolution of g(t) and h(t)")
 plt.xlabel("Time space")
-#plt.xlim(-300,0)
-plt.plot(X,convo)
+plt.grid()
+plt.plot(X,convoNew*deltaT)
 
-
-plt.figure(4)
+#comparing the convolution against the original functions
+plt.figure(2)
+plt.title("Comparison of convolution and original functions")
+plt.grid()
 plt.plot(X,g_time,label="g(t)")
 plt.plot(X,h_time,label="h(t)")
-plt.plot(X,convo,label="convolution")
+plt.plot(X,convoNew*deltaT,label="convolution")
 plt.legend()
 
 

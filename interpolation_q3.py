@@ -121,7 +121,8 @@ def cubic_spline(X,Y):
                 C_coeff=(1/6)*(((A_coeff)**3)-A_coeff)*((X[i+1]-X[i])**2)
                 D_coeff=(1/6)*(((B_coeff)**3)-B_coeff)*((X[i+1]-X[i])**2) 
                 
-                interpolatedVal=(A_coeff*Y[i])+(B_coeff*Y[i+1])+(C_coeff*secDeriv[i][0])+(D_coeff*secDeriv[i+1][0])
+                interpolatedVal=(A_coeff*Y[i])+(B_coeff*Y[i+1])+\
+                (C_coeff*secDeriv[i][0])+(D_coeff*secDeriv[i+1][0])
                 new_Y.append(interpolatedVal)
     
     
@@ -149,20 +150,36 @@ y_spline=cubic_spline(X,Y)[1]
 poly=lagrange(X,Y)
 N=len(X)
 new_X=np.arange(X[0],X[N-1],0.01)
-print(poly)
 Y_scipy=poly(new_X)
 
 
 #compare against scipy spline
 f=CubicSpline(X,Y)
-plt.plot(new_X,f(new_X))
-
-plt.plot(x_spline,y_spline)
 
 
+#comparing the cubic spline method and lagrange method
+plt.figure(1)
+plt.title("Compare cubic spline method and lagrange method")
+plt.plot(x_spline,y_spline,label="Spline Interpolation")
+plt.plot(x_lagrange,y_lagrange,label="Lagrange approximation")
+plt.grid()
+plt.legend()
 
+#validating lagrange interpolation method
+plt.figure(2)
+plt.title("Lagrange interpolation vs Scipy")
+plt.plot(x_lagrange,y_lagrange,label="Lagrange")
+plt.plot(new_X,Y_scipy,label="Scipy Lagrange")
+plt.legend()
+plt.grid()
 
-
+#validating cubic spline method
+plt.figure(3)
+plt.title("Cubic spline vs Scipy")
+plt.plot(x_spline,y_spline, label="Spline")
+plt.plot(new_X,f(new_X),label="Scipy spline")
+plt.legend()
+plt.grid()
 
 plt.show
 

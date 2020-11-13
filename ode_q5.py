@@ -15,6 +15,12 @@ def firstOrder(t,Q,R,C,Vin):
     
 
 def runge_kutta(t0,Q0,t,h):
+    """
+    the runge kutta takes 4 pieces of information to calculate the next y
+    value corresponding to the step in direction x
+    
+    """
+    
     #find the number of steps/iterations
     n=int((t-t0)/h)
     R=10
@@ -38,4 +44,38 @@ def runge_kutta(t0,Q0,t,h):
     return Q0
 
 runge_kutta(0,3.2*(10**-16),2,1)
+
+
+#same concept as runge kutta, just different formula
+def adam_bash(t0,Q0,t,h):
+    
+    """
+    the adam bashforth method takes the values of the 3 previous steps in order
+    to calculate the next value of y at the corresponding x
+
+    """
+    
+    #find step size
+    n=int((t-t0)/h)
+    R=10
+    C=1.6*(10**-19)
+    Vin=2
+    #again loop through 4 equations 
+    for i in range(n):
+        if i=0:
+            f_a=firstOrder(t0,Q0,R,C,Vin)
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
