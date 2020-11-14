@@ -21,59 +21,30 @@ def lud(A):
      
      # For each U and L column
     for j in range(columns):
-         
         # Loop through the column values of U
         for i in range(rows):
-            
             # Condition to calculate value
-            
             if i<=j:
-                
-                # Line 37 to 45 will calculate and set accordingly the values of 
-                # the matrix U. 
-                
                 # Initialise a U counter
-                
                 sum_U = 0
-                
                 # This loop is for the sum in the U equation
-                
-                for k in range(i):
-                    
+                for k in range(i):  
                     sum_U = sum_U + (L[i][k] * U[k][j])
-                  
                 U[i][j] = A[i][j] - sum_U
-                
-               
             else:
-                
                 continue
             
         # Loop through the column values of L
         for i in range(rows):
-
             # Condition to calculate value
-            
             if i>=j:
-                
-                # Line 65 to 73 will calculate and set accordingly the values of 
-                # the matrix L. 
-                
                 # Initialise a L counter
-                
                 sum_L = 0
-                
                 # This loop is for the sum in the L equation
-                
-                for k in range(j):
-                    
+                for k in range(j):    
                     sum_L = sum_L + (L[i][k] * U[k][j])
-                
                 L[i][j]=(A[i][j] - sum_L)/U[j][j]
-                
-                
-            else:
-                
+            else:   
                 continue
             
     return(U,L)
