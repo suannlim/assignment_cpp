@@ -2,27 +2,48 @@ import matplotlib.pyplot as plt
 
 def firstOrder(t,Vout,R,C,Vin):
     return (Vin-(Vout*(1+R)))/(R*C)
-"""
-def square_wave(V0,T,t0,tend,h):
 
+def square_wave(V0,T,t0,tend,h):
+    """
+    #V0 is max value of square wave
+    #T is period of square wave
+    #t0 is the start time
+    #tend is the time step
+    #h is the step size
+    """
     #defining our square wave function to be used in part e
 
     #initialise arrays to store t and Vin values
-    T=[]
-    T.append(t0)
+    TimeVal=[]
     V=[]
-    V.append(V0)
     
+    print("Tend: " + str(tend), "T0: " + str(t0))
     n=int((tend-t0)/h)
+    t=t0
+    
     for i in range(n):
-        t=t0
-        if (t-t0)<T/2:
+        t1 = (t - t0)
+        print(str(t1))
+        TimeVal.append(t)
+        #While bigger than time period, reduce it until it comes into range
+        while t1 >= T:
+            t1 = t1 - T
+        # If within 0 and T/2, square wave function results to V0
+        if t1 < T/2 and t1 >= 0:
+            V.append(0)
+        # Otherwise, it is within T/2 and T, sqf results to 0
+        else:
             V.append(V0)
-        if (t-t0)>=
             
-"""    
+        #update t value
+        t+=h
+            
+    res = {TimeVal[i]: V[i] for i in range(len(TimeVal))}    
+    print(res)     
+    return res
+   
 
-def runge_kutta(t0,Vout,tend,h):
+def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
     """
     the runge kutta takes 4 pieces of information to calculate the next y
     value corresponding to the step in direction x
@@ -38,10 +59,18 @@ def runge_kutta(t0,Vout,tend,h):
     n=int((tend-t0)/h)
     R=1
     C=1
-    Vin=0
+    
+    
+    if IsSquare:
+        sqrmap=square_wave(Vin,T,t0,tend,h)
+        
     #then we loop through the 4 equations n times to find the value of Q
     #at our given t
     for i in range(n):
+        if IsSquare:
+            Vin = sqrmap[t0]
+        else:
+            Vin = Vin
         f_a=firstOrder(t0,Vout,R,C,Vin)
         f_b=firstOrder(t0+(h*0.5),Vout + (f_a*0.5*h),R,C,Vin)
         f_c=firstOrder(t0+(h*0.5),Vout + (f_b*0.5*h),R,C,Vin)
@@ -122,8 +151,8 @@ def adam_bash(t0,Vout,tend,h,init_Vin):
 #define V at t<0
 V=2    
     
-t_RK=runge_kutta(0,1,1,0.001)[0]
-V_RK=runge_kutta(0,1,1,0.001)[1]
+t_RK=runge_kutta(0,1,1,0.001,0,0,False)[0]
+V_RK=runge_kutta(0,1,1,0.001,0,0,False)[1]
 
 t_AB=adam_bash(0,1,1,0.001,V)[0]
 V_AB=adam_bash(0,1,1,0.001,V)[1]
@@ -139,14 +168,22 @@ plt.legend()
 
 #partd,varying step size on runge kutta method
 #new runge kutta with double the step size of the original
-t2_RK=runge_kutta(0,1,1,0.002)[0]
-V2_RK=runge_kutta(0,1,1,0.002)[1]
+t2_RK=runge_kutta(0,1,1,0.002,0,0,False)[0]
+V2_RK=runge_kutta(0,1,1,0.002,0,0,False)[1]
 plt.figure(2)
 plt.title("Comparing varying step size of RK4")
 plt.plot(t_RK,V_RK,label="RK4 step size 0.001")
 plt.plot(t2_RK,V2_RK,label="RK4 step size 0.002")
 plt.legend()
 plt.grid()
+
+#parte,now we use a square wave with a runge kutta
+t3_RK=runge_kutta(0,1,1,0.001,2,0.2,True)[0]
+V3_RK=runge_kutta(0,1,1,0.001,2,0.2,True)[1]
+plt.figure(3)
+plt.title("Runge Kutta with Square Wave")
+plt.plot(t3,V3)
+
 
 
 
