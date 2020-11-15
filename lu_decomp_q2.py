@@ -6,7 +6,12 @@ def lud(A):
     This function decomposes a given nxn matrix into the upper and lower 
     matrices.
     
+    INPUT:
     A - Input matrix to decompose
+    
+    OUTPUT:
+    U - Upper matrix
+    L - Lower matrix
     """
     rows = len(A)
     columns = len(A[0])
@@ -23,7 +28,7 @@ def lud(A):
     for q in range(columns):
         # Set L diagonal values to 1
         L[q][q]=1 
-     # For each U and L column
+    # For each U and L column
     for j in range(columns):
         # Loop through the column values of U
         for i in range(rows):
@@ -60,12 +65,17 @@ def determinant(U):
     This function finds the determinant of a matrix using the multiplicative
     sum of the diagonal of its upper matrix.
     
+    INPUT:
     U - Upper matrix
+    
+    OUTPUT:
+    diagonal - Multiplicative sum of the diagonal of the input matrix
     """
     diagonal=1
     for x in range(len(U)):
         diagonal = diagonal * U[x][x]
     print("This is the determinant " + str(diagonal))
+    return diagonal
     
 
 def substitution(U,L,b):
@@ -73,9 +83,13 @@ def substitution(U,L,b):
     This function uses forward and backwards substitution to solve the
     matrix equation.
     
+    INPUT:
     U - Upper matrix
     L - Lower matrix
     b - Solution matrix
+    
+    OUTPUT:
+    x - Solution of matrix equation
     """
     #this function will use forward and backward substitution for the 
     #x vector 
@@ -96,19 +110,27 @@ def column(matrix,i):
     """
     This function decomposes a given matrix into the ith collumn
     
+    INPUT:
     matrix - Matrix to decompose
     i - Column number desired
+    
+    OUTPUT:
+    Specified column in input matrix
     """
     return [row[i] for row in matrix]
 
 def findInverse(A, U, L):
     """
-    This function inds the inverse of a matrix using the solution of the 
+    This function finds the inverse of a matrix using the solution of the 
     matrix equation
     
+    INPUT:
     A - Coefficient matrix
     U - Upper matrix
     L - Lower matrix
+    
+    OUTPUT:
+    inverse - Inverse of matrix A
     """
     N=len(A)
     

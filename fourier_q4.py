@@ -8,8 +8,11 @@ def h(t):
     """
     Defining the top hat function.
     
+    INPUT:
     t - array of time values
     
+    OUTPUT:
+    function - array of h values
     """
     
     function=np.array([])
@@ -25,8 +28,11 @@ def g(t):
     """
     Defining the Gaussian function.
     
+    INPUT:
     t - array of time values
     
+    OUTPUT:
+    function - array of g values
     """
     function=np.array([])
     for x in t:
@@ -39,9 +45,14 @@ def convolve(N,start,stop):
     """
     This function will convolve g(t) and h(t).
     
+    INPUT:
     N - Number of sampling points
     start - Start point of range of samples
     stop - End point of range of samples
+    
+    OUTPUT:
+    X - array of time values
+    convoNew*deltaT - normalised convolved functions values
     
     """
     #first we need to ensure that our number of samples is in the form 2^m

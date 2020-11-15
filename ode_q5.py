@@ -1,27 +1,35 @@
+import math
 
-
-def firstOrder(t,Vout,R,C,Vin):
+def firstOrder(t,Vout,Vin):
     """
     This function defines the first order differential equation we are solving.
     
+    INPUT:
     t - The time at which the ODE is being evaluated at
     Vout - Voltage out at the specified time
     R - Resistance of component in the circuit
     C - Capacitance of component in the circuit
     Vin - Voltage in at the specified time
+    
+    OUTPUT:
+    Form of the ODE
     """
-    return (Vin-(Vout*(1+R)))/(R*C)
+    return Vin - Vout
 
 def square_wave(V0,T,t0,tend,h):
     """
     This function defines the square wave we use as Vin for Q5e. A dictionary
     is used to find corresponding values of Vin at a specified time.
     
+    INPUT:
     V0 - Peak voltage of the square wave
     T- Time period of the wave
     t0 - Start time of the square wave
     tend - Time when square wave terminates
     h - Step size in time axis
+    
+    OUTPUT:
+    res - Dictionary mapping t values to square wave Vin values
     """
 
     #initialise arrays to store t and Vin values
@@ -57,6 +65,7 @@ def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
     This function defines the Runge Kutta 4th order equation to solve for 
     our ODE at a specified time.
     
+    INPUT:
     t0 - Initial time of the ODE
     Vout - Time at which functions calculates Vout of ODE
     tend - Time at which we want to find Vout
@@ -66,6 +75,10 @@ def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
     T - Time period of square wave
     IsSquare - Boolean to check if Vin is a square wave
     
+    OUTPUT:
+    t - Array of time values
+    V - Array of Vout values
+    V[n] - Estimation of Vout at specified t
     """
         
     #initialise array to store t,Q values
@@ -76,9 +89,6 @@ def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
     
     #find the number of steps/iterations
     n=int((tend-t0)/h)
-    R=1
-    C=1
-    
     
     #checking for square wave input Vin
     if IsSquare:
@@ -91,10 +101,10 @@ def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
             Vin = sqrmap[t0]
         else:
             Vin = Vin
-        f_a=firstOrder(t0,Vout,R,C,Vin)
-        f_b=firstOrder(t0+(h*0.5),Vout + (f_a*0.5*h),R,C,Vin)
-        f_c=firstOrder(t0+(h*0.5),Vout + (f_b*0.5*h),R,C,Vin)
-        f_d=firstOrder(t0+h,Vout+(h*f_c),R,C,Vin)
+        f_a=firstOrder(t0,Vout,Vin)
+        f_b=firstOrder(t0+(h*0.5),Vout + (f_a*0.5*h),Vin)
+        f_c=firstOrder(t0+(h*0.5),Vout + (f_b*0.5*h),Vin)
+        f_d=firstOrder(t0+h,Vout+(h*f_c),Vin)
         
         #update new Q0 value
         Vout=Vout + (h/6)*(f_a+(2*f_b)+(2*f_c)+f_d)
@@ -113,32 +123,35 @@ def adam_bash(t0,Vout,tend,h,init_Vin,Vin):
     This function defines the 4th Order Adam Bashforth method to solve for
     an ODE at a specified time with given initial conditions
     
+    INPUT:
     t0 - Initial time of ODE
     Vout - Output voltage of circuit at t0
     tend - Time at which function calculates Vout of the ODE
     h - Step size on time axis
     init_Vin - Value of input voltage at t<0
     
+    OUTPUT:
+    t - Array of time values
+    V - Array of Vout values
+    V[n] - Estimation of Vout at specified t
+    
     """
     #find step size
     n=int((tend-t0)/h)
-    R=1
-    C=1
-    Vin=0
-    
+
     #euler steps to find V1
     k=10 #number of euler steps
     V0=Vout
     t_start=t0
     for l in range(k):
-        V0=V0+((h/k)*firstOrder(t_start,V0,R,C,init_Vin))
+        V0=V0+((h/k)*firstOrder(t_start,V0,init_Vin))
         t_start=t_start+(h/k)
     V1=V0
     
     #now we can implement leap frog method
-    Vneg1=V1-2*firstOrder(t0,Vout,R,C,init_Vin)*h
-    Vneg2=Vout-2*firstOrder(t0-h,Vneg1,R,C,init_Vin)*h
-    Vneg3=Vneg1-2*firstOrder(t0-(h*2),Vneg2,R,C,init_Vin)*h
+    Vneg1=V1-2*firstOrder(t0,Vout,init_Vin)*h
+    Vneg2=Vout-2*firstOrder(t0-h,Vneg1,init_Vin)*h
+    Vneg3=Vneg1-2*firstOrder(t0-(h*2),Vneg2,init_Vin)*h
     
     #store values V values in array
     V=[]
@@ -154,10 +167,10 @@ def adam_bash(t0,Vout,tend,h,init_Vin,Vin):
         
     #now we have all info we need and can implement adam bashforth method
     for i in range(n):
-        f_a=firstOrder(t[i+3],V[i+3],R,C,Vin)
-        f_b=firstOrder(t[i+2],V[i+2],R,C,Vin)
-        f_c=firstOrder(t[i+1],V[i+2],R,C,Vin)
-        f_d=firstOrder(t[i],V[i],R,C,Vin)
+        f_a=firstOrder(t[i+3],V[i+3],Vin)
+        f_b=firstOrder(t[i+2],V[i+2],Vin)
+        f_c=firstOrder(t[i+1],V[i+2],Vin)
+        f_d=firstOrder(t[i],V[i],Vin)
         
         V.append(V[i+3]+((h/24)*(55*f_a - 59*f_b + 37*f_c -9*f_d)))
         t.append(t[i+3]+h)
@@ -169,6 +182,7 @@ def OdeSolver(IsRK4, t0, Vout, tend, h, init_Vin,Vin,T,IsSquare):
     This function is a switch that either solves the ODE using the RK4 method
     or the AB4 method. The default is RK4.
     
+    INPUT:
     IsRK4 - Boolean. If true, RK4 method is called. If false, AB4 method
             is called
     t0 - Initial time of ODE
@@ -183,6 +197,10 @@ def OdeSolver(IsRK4, t0, Vout, tend, h, init_Vin,Vin,T,IsSquare):
     T - Time period of square wave
     IsSquare - Boolean to check if Vin is a square wave
     
+    OUTPUT:
+    t_RK/t_AB - Array of time values
+    V_RK/V_AB - Array of Vout values
+    answer - Estimation of Vout at specified t
     """
     if IsRK4:
         t_RK=runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare)[0]
@@ -195,6 +213,22 @@ def OdeSolver(IsRK4, t0, Vout, tend, h, init_Vin,Vin,T,IsSquare):
         V_AB=adam_bash(t0,Vout,tend,h,init_Vin,Vin)[1]
         answer=adam_bash(t0,Vout,tend,h,init_Vin,Vin)[2]
         return(t_AB,V_AB,answer)
+        
+def analyticalSoln(t):
+    """
+    This function is the analytical solution of the ODE when Vin=0
+    
+    INPUT:
+    t - Array of t values
+    
+    OUTPUT:
+    V - Array of corresponding V values 
+    """
+    V=[]
+    for i in t:
+        V.append(math.exp(-1*i))
+    return V
+    
         
 
 

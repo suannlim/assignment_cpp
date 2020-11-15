@@ -6,9 +6,18 @@ def float_point_rounding(x):
     than the given input value. It will then return the fractional rounding
     range of that number.
     
+    INPUT:
     x - Input value to find the fractional rounding range of.
     
+    OUTPUT:
+    next_high - Next highest representable real number
+    next_low - Next lowest representable real number
+    fracRR - Fractional rounding range of input value
+
     """
+    #adding 2^n where n is decreasing in increments of 1 until the 
+    #computer can no longer represent the number and it returns to the
+    #original input
     y=0
     counter=0
     while x!=y:
@@ -19,9 +28,7 @@ def float_point_rounding(x):
     next_high = x+(2**(counter+2))    
     print("The next largest representable number is " + str(next_high))
     
-    #the while loops repeatedly prints the given input value by minusing
-    #1 in factors of 10 until it can no longer be representable and returns
-    #to the original value
+    #similar to what is done above but instead we are taking away 2^n
     z=0
     counter_1=0
     while x!=z:
@@ -33,16 +40,16 @@ def float_point_rounding(x):
     
     
     #finding the numerical difference between the next high, next low and
-    #the original number
-    upper_diff=next_high - x
-    lower_diff=x-next_low
+    #the original number and halving it to find the rounding range
+    upper_diffHalf=(next_high - x)/2
+    lower_diffHalf=(x-next_low)/2
     
     #find the total fractional rounding range 
-    fracRR=(upper_diff + lower_diff)/x
+    fracRR=(upper_diffHalf + lower_diffHalf)/x
     
     print("The fractional rounding range of " + str(x) + " is " + str(fracRR))
     
-    return(next_high,next_low)
+    return(next_high,next_low,fracRR)
     
     
     

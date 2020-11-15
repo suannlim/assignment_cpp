@@ -9,9 +9,13 @@ def lagrange_poly(X,Y):
     that fits the points and outputs a set of Y values for a linearly spaced
     array of X values determined by the input
     
+    INPUT:
     X - Data points for x axis
     Y - Data points for y axis
     
+    OUTPUT:
+    new_X - New array of x values
+    new_Y - New array of Y values
     """
     N=len(X)
     
@@ -57,9 +61,13 @@ def cubic_spline(X,Y):
     array of new X values determiend by the range of the input values, it 
     outputs an array of Y values to be plotted.
     
+    INPUT:
     X - Data points for x axis
     Y - Data points for y axis
     
+    OUTPUT:
+    new_X - New array of x values
+    new_Y - New array of Y values
     """
     
     #number of data points
@@ -79,14 +87,17 @@ def cubic_spline(X,Y):
     for i in range(N):
         
         if i>=1 and i<=(N-2):
+            #finding the coefficients
             firstCoeff=(X[i]-X[i-1])/6
             secCoeff=(X[i+1]-X[i-1])/3
             thirdCoeff=(X[i+1]-X[i])/6
             
+            #appending the coefficients to the relevant place in the matrix
             derivCoeff[i][i-1]=firstCoeff
             derivCoeff[i][i]=secCoeff
             derivCoeff[i][i+1]=thirdCoeff
-            
+     
+    #setting the natural spline boundary conditions
     derivCoeff[0][0]=1
     derivCoeff[N-1][N-1]=1
             
@@ -117,11 +128,13 @@ def cubic_spline(X,Y):
             
             if X[i]<=new_X[x] and new_X[x]<=X[i+1]:
                 
+                #finding the coefficients
                 A_coeff=(X[i+1]-new_X[x])/(X[i+1]-X[i])
                 B_coeff=1-A_coeff
                 C_coeff=(1/6)*(((A_coeff)**3)-A_coeff)*((X[i+1]-X[i])**2)
                 D_coeff=(1/6)*(((B_coeff)**3)-B_coeff)*((X[i+1]-X[i])**2) 
                 
+                #appending the interpolated values to Y
                 interpolatedVal=(A_coeff*Y[i])+(B_coeff*Y[i+1])+\
                 (C_coeff*secDeriv[i][0])+(D_coeff*secDeriv[i+1][0])
                 new_Y.append(interpolatedVal)
