@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.interpolate import lagrange
-from scipy.interpolate import CubicSpline
 import lu_decomp_q2 as lu
 
 
@@ -11,9 +8,13 @@ import lu_decomp_q2 as lu
 
 def lagrange_poly(X,Y):
     """
-    #the lagrange function will take a set of data to find the polynomial 
-    #that fits the points and outputs a set of Y values of a lin.space x
-    #range of values that are appropriate to the given X
+    This function will take a set of data points to find the polynomial
+    that fits the points and outputs a set of Y values for a linearly spaced
+    array of X values determined by the input
+    
+    X - Data points for x axis
+    Y - Data points for y axis
+    
     """
     N=len(X)
     
@@ -54,10 +55,14 @@ def lagrange_poly(X,Y):
 def cubic_spline(X,Y):
     
     """
-    the cubic spline algorithm takes an array of X and Y values and finds a 
-    suitable polynomial between each set of X points. we can then input a
-    new array of X values into each of these polynomials to find a new
-    array of Y values that fit the points
+    This function uses the cubic spline algorithm to find a suitable 
+    polynomial between each set of X points. Then using a linearly spaced
+    array of new X values determiend by the range of the input values, it 
+    outputs an array of Y values to be plotted.
+    
+    X - Data points for x axis
+    Y - Data points for y axis
+    
     """
     
     #number of data points
@@ -88,8 +93,7 @@ def cubic_spline(X,Y):
     derivCoeff[0][0]=1
     derivCoeff[N-1][N-1]=1
             
-     
-        
+      
     #generate array that contains solution to each equation
     matrixSoln=[[0]for x in range(N)]
     for i in range(N):
@@ -128,61 +132,6 @@ def cubic_spline(X,Y):
     
     return(new_X,new_Y)           
         
-
-
-
-#input given values for X and Y        
-X=[-0.75,-0.5,-0.35,-0.1,0.05,0.1,0.23,0.29,0.48,0.6,0.92,1.05,1.5]
-Y=[0.1,0.3,0.47,0.66,0.60,0.54,0.30,0.15,-0.32,-0.54,-0.6,-0.47,-0.08]
-
-
-#interpolate values using lagrange polynomial method
-x_lagrange=lagrange_poly(X,Y)[0]
-y_lagrange=lagrange_poly(X,Y)[1]
-
-
-#interpolate values using cubic spline method
-x_spline=cubic_spline(X,Y)[0]
-y_spline=cubic_spline(X,Y)[1]
-
-
-#compare against scipy lagrange
-poly=lagrange(X,Y)
-N=len(X)
-new_X=np.arange(X[0],X[N-1],0.01)
-Y_scipy=poly(new_X)
-
-
-#compare against scipy spline
-f=CubicSpline(X,Y)
-
-
-#comparing the cubic spline method and lagrange method
-plt.figure(1)
-plt.title("Compare cubic spline method and lagrange method")
-plt.plot(x_spline,y_spline,label="Spline Interpolation")
-plt.plot(x_lagrange,y_lagrange,label="Lagrange approximation")
-plt.grid()
-plt.legend()
-
-#validating lagrange interpolation method
-plt.figure(2)
-plt.title("Lagrange interpolation vs Scipy")
-plt.plot(x_lagrange,y_lagrange,label="Lagrange")
-plt.plot(new_X,Y_scipy,label="Scipy Lagrange")
-plt.legend()
-plt.grid()
-
-#validating cubic spline method
-plt.figure(3)
-plt.title("Cubic spline vs Scipy")
-plt.plot(x_spline,y_spline, label="Spline")
-plt.plot(new_X,f(new_X),label="Scipy spline")
-plt.legend()
-plt.grid()
-
-plt.show
-
 
 
 

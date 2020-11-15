@@ -1,24 +1,28 @@
-# -*- coding: utf-8 -*-
-
-#write a function that decomposes a matrix into the upper and lower matrices
-#using crout's algorithm
-
 import numpy as np
 
 def lud(A):
     
+    """
+    This function decomposes a given nxn matrix into the upper and lower 
+    matrices.
+    
+    A - Input matrix to decompose
+    """
     rows = len(A)
     columns = len(A[0])
+    
+    #checking to see if the matrix is nxn form.
+    if rows!=columns:
+        print("Error! This is not an nxn matrix")
+        return 0
     
     # Create zero matrix with same dimensions as A
     U=[[0 for y in range(columns)] for x in range(rows)]
     L=[[0 for n in range(columns)] for m in range(rows)]
     
     for q in range(columns):
-        
         # Set L diagonal values to 1
-        L[q][q]=1
-     
+        L[q][q]=1 
      # For each U and L column
     for j in range(columns):
         # Loop through the column values of U
@@ -52,8 +56,12 @@ def lud(A):
 
 
 def determinant(U):
-    #this function uses LU decomposition to find the determinant of a matrix
-    #as the det is the multiplicative sum of the diagonal of U
+    """
+    This function finds the determinant of a matrix using the multiplicative
+    sum of the diagonal of its upper matrix.
+    
+    U - Upper matrix
+    """
     diagonal=1
     for x in range(len(U)):
         diagonal = diagonal * U[x][x]
@@ -61,6 +69,14 @@ def determinant(U):
     
 
 def substitution(U,L,b):
+    """
+    This function uses forward and backwards substitution to solve the
+    matrix equation.
+    
+    U - Upper matrix
+    L - Lower matrix
+    b - Solution matrix
+    """
     #this function will use forward and backward substitution for the 
     #x vector 
     
@@ -77,7 +93,40 @@ def substitution(U,L,b):
     return x
 
 def column(matrix,i):
+    """
+    This function decomposes a given matrix into the ith collumn
+    
+    matrix - Matrix to decompose
+    i - Column number desired
+    """
     return [row[i] for row in matrix]
+
+def findInverse(A, U, L):
+    """
+    This function inds the inverse of a matrix using the solution of the 
+    matrix equation
+    
+    A - Coefficient matrix
+    U - Upper matrix
+    L - Lower matrix
+    """
+    N=len(A)
+    
+    #Calling the identity matrix to substitute as the solution
+    identityMat=np.identity(N)
+    inverse=[]
+    
+    #Looping through each column to find the inverse of each column and column
+    #stacking the results
+    for i in range(N):
+        b=column(identityMat,i)
+        soln=substitution(U,L,b)
+        inverse.append(soln)
+    inverse=np.column_stack((inverse))
+    print("The inverse of the original matrix is")
+    print(inverse)
+    return inverse
+          
 
 
 

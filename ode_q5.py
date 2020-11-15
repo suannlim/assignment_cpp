@@ -1,29 +1,39 @@
-import matplotlib.pyplot as plt
+
 
 def firstOrder(t,Vout,R,C,Vin):
+    """
+    This function defines the first order differential equation we are solving.
+    
+    t - The time at which the ODE is being evaluated at
+    Vout - Voltage out at the specified time
+    R - Resistance of component in the circuit
+    C - Capacitance of component in the circuit
+    Vin - Voltage in at the specified time
+    """
     return (Vin-(Vout*(1+R)))/(R*C)
 
 def square_wave(V0,T,t0,tend,h):
     """
-    #V0 is max value of square wave
-    #T is period of square wave
-    #t0 is the start time
-    #tend is the time step
-    #h is the step size
+    This function defines the square wave we use as Vin for Q5e. A dictionary
+    is used to find corresponding values of Vin at a specified time.
+    
+    V0 - Peak voltage of the square wave
+    T- Time period of the wave
+    t0 - Start time of the square wave
+    tend - Time when square wave terminates
+    h - Step size in time axis
     """
-    #defining our square wave function to be used in part e
 
     #initialise arrays to store t and Vin values
     TimeVal=[]
     V=[]
     
-    print("Tend: " + str(tend), "T0: " + str(t0))
+    #Finding the number of iterations depending on the input step size
     n=int((tend-t0)/h)
     t=t0
     
     for i in range(n):
         t1 = (t - t0)
-        print(str(t1))
         TimeVal.append(t)
         #While bigger than time period, reduce it until it comes into range
         while t1 >= T:
@@ -38,17 +48,26 @@ def square_wave(V0,T,t0,tend,h):
         #update t value
         t+=h
             
-    res = {TimeVal[i]: V[i] for i in range(len(TimeVal))}    
-    print(res)     
+    res = {TimeVal[i]: V[i] for i in range(len(TimeVal))}        
     return res
    
 
 def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
     """
-    the runge kutta takes 4 pieces of information to calculate the next y
-    value corresponding to the step in direction x
+    This function defines the Runge Kutta 4th order equation to solve for 
+    our ODE at a specified time.
+    
+    t0 - Initial time of the ODE
+    Vout - Time at which functions calculates Vout of ODE
+    tend - Time at which we want to find Vout
+    h - Step size in time axis
+    Vin - If IsSquare=False, Vin is the input Voltage for t>0. If 
+        IsSquare=True, Vin is the peak voltage of the square wave.
+    T - Time period of square wave
+    IsSquare - Boolean to check if Vin is a square wave
     
     """
+        
     #initialise array to store t,Q values
     t=[]
     t.append(t0)
@@ -61,6 +80,7 @@ def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
     C=1
     
     
+    #checking for square wave input Vin
     if IsSquare:
         sqrmap=square_wave(Vin,T,t0,tend,h)
         
@@ -83,21 +103,24 @@ def runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare):
         t0=t0+h
         t.append(t0)
         
-    return(t,V)
+    return(t,V,V[n])
 
 
 #same concept as runge kutta, just different formula
-def adam_bash(t0,Vout,tend,h,init_Vin):
+def adam_bash(t0,Vout,tend,h,init_Vin,Vin):
     
     """
-    the adam bashforth method takes the values of the 3 previous steps in order
-    to calculate the next value of y at the corresponding x
-
-    in order to implement the adam bashforth method, we need V-1,V-2,V-3. this
-    can be achieved using the leap frog method with some initial euler steps 
-    to find V1
+    This function defines the 4th Order Adam Bashforth method to solve for
+    an ODE at a specified time with given initial conditions
+    
+    t0 - Initial time of ODE
+    Vout - Output voltage of circuit at t0
+    tend - Time at which function calculates Vout of the ODE
+    h - Step size on time axis
+    init_Vin - Value of input voltage at t<0
+    
     """
-        #find step size
+    #find step size
     n=int((tend-t0)/h)
     R=1
     C=1
@@ -113,7 +136,6 @@ def adam_bash(t0,Vout,tend,h,init_Vin):
     V1=V0
     
     #now we can implement leap frog method
-    
     Vneg1=V1-2*firstOrder(t0,Vout,R,C,init_Vin)*h
     Vneg2=Vout-2*firstOrder(t0-h,Vneg1,R,C,init_Vin)*h
     Vneg3=Vneg1-2*firstOrder(t0-(h*2),Vneg2,R,C,init_Vin)*h
@@ -124,8 +146,6 @@ def adam_bash(t0,Vout,tend,h,init_Vin):
     V.append(Vneg2)
     V.append(Vneg1)
     V.append(Vout)
-    
-
     
     #store t values in array
     t=[]
@@ -142,54 +162,40 @@ def adam_bash(t0,Vout,tend,h,init_Vin):
         V.append(V[i+3]+((h/24)*(55*f_a - 59*f_b + 37*f_c -9*f_d)))
         t.append(t[i+3]+h)
     
-    print(t)
-    print(V)
-    return(t,V)
-
-
-#
-#define V at t<0
-V=2    
+    return(t,V,V[n])
     
-t_RK=runge_kutta(0,1,1,0.001,0,0,False)[0]
-V_RK=runge_kutta(0,1,1,0.001,0,0,False)[1]
-
-t_AB=adam_bash(0,1,1,0.001,V)[0]
-V_AB=adam_bash(0,1,1,0.001,V)[1]
-
-#partc, comparing the runge kutta and adam bashforth 4th order
-plt.figure(1)
-plt.title("Adam Bashforth vs Runge Kutta 4th Order")
-plt.grid()
-plt.plot(t_RK,V_RK,label="Runge Kutta")
-plt.plot(t_AB,V_AB, label="Adam Bashforth")
-plt.legend()
-
-
-#partd,varying step size on runge kutta method
-#new runge kutta with double the step size of the original
-t2_RK=runge_kutta(0,1,1,0.002,0,0,False)[0]
-V2_RK=runge_kutta(0,1,1,0.002,0,0,False)[1]
-plt.figure(2)
-plt.title("Comparing varying step size of RK4")
-plt.plot(t_RK,V_RK,label="RK4 step size 0.001")
-plt.plot(t2_RK,V2_RK,label="RK4 step size 0.002")
-plt.legend()
-plt.grid()
-
-#parte,now we use a square wave with a runge kutta
-t3_RK=runge_kutta(0,1,1,0.001,2,0.2,True)[0]
-V3_RK=runge_kutta(0,1,1,0.001,2,0.2,True)[1]
-plt.figure(3)
-plt.title("Runge Kutta with Square Wave")
-plt.plot(t3,V3)
-
-
-
-
-
-
-plt.show()
+def OdeSolver(IsRK4, t0, Vout, tend, h, init_Vin,Vin,T,IsSquare):
+    """
+    This function is a switch that either solves the ODE using the RK4 method
+    or the AB4 method. The default is RK4.
+    
+    IsRK4 - Boolean. If true, RK4 method is called. If false, AB4 method
+            is called
+    t0 - Initial time of ODE
+    Vout - Output voltage of circuit at t0
+    tend - Time at which function calculates Vout of the ODE
+    h - Step size on time axis
+    init_Vin - Value of input voltage at t<0 (only relevant to AB4)
+    Vin - FOR RK4:If IsSquare=False, Vin is the input Voltage for t>0. If 
+                    IsSquare=True, Vin is the peak voltage of the square wave.
+                    
+          FOR AB4: Value of input voltage at t>0
+    T - Time period of square wave
+    IsSquare - Boolean to check if Vin is a square wave
+    
+    """
+    if IsRK4:
+        t_RK=runge_kutta(t0,Vout,tend,h,Vin,T,IsSquare)[0]
+        V_RK=runge_kutta(0,Vout,tend,h,Vin,T,IsSquare)[1]
+        answer=runge_kutta(0,Vout,tend,h,Vin,T,IsSquare)[2]
+        return(t_RK,V_RK,answer)
+        
+    else:
+        t_AB=adam_bash(t0,Vout,tend,h,init_Vin,Vin)[0]
+        V_AB=adam_bash(t0,Vout,tend,h,init_Vin,Vin)[1]
+        answer=adam_bash(t0,Vout,tend,h,init_Vin,Vin)[2]
+        return(t_AB,V_AB,answer)
+        
 
 
 
