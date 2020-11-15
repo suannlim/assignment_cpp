@@ -28,7 +28,7 @@ in the console. In the cases where the answers are printed into the console, the
 alternate case where the data is presented as a graph, the data points are colour coded in a legend. In the graphs titled "Validation", if there only
 appears to be a singular curve, this is because my function output and the in-built functions are exactly equal - thus providing validation.
 
-##Question 1 - Floating Point Variables
+## Question 1 - Floating Point Variables
 
 This section will detail the functions found in float_point_round_q1.py.
 
@@ -50,7 +50,7 @@ fracRR - Fractional rounding range of input value
 
  ```
  
-##Question2 - Matrix Methods
+## Question2 - Matrix Methods
 
 This section will detail the functions found in lu_decomp_q2.py.
 
@@ -125,7 +125,7 @@ OUTPUT:
 inverse - Inverse of matrix A
 ```
 
-##Question 3 - Interpolation
+## Question 3 - Interpolation
 
 This section will detail the functions found in interpolation_q3.py.
 
@@ -162,7 +162,7 @@ new_X - New array of x values
 new_Y - New array of Y values
 ```
 
-##Question 4 - Fourier Transforms
+## Question 4 - Fourier Transforms
 
 This section will detail the functions found in fourier_q4.py
 
@@ -206,7 +206,7 @@ X - array of time values
 convoNew*deltaT - normalised convolved functions values
 ```
 
-##Question 5 - Ordinary Differential Equations
+## Question 5 - Ordinary Differential Equations
 
 ```
 firstOrder(t,Vout,R,C,Vin):
@@ -310,7 +310,7 @@ answer - Estimation of Vout at specified t
 
 ```
 
-##Ending
+## Ending
 Thanks for reading! If you have any issues running the code, please contact me at su.lim18@imperial.ac.uk
 
 
