@@ -3,9 +3,6 @@
 import numpy as np
 import lu_decomp_q2 as lu
 
-
-
-
 def lagrange_poly(X,Y):
     """
     This function will take a set of data points to find the polynomial

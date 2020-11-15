@@ -123,8 +123,7 @@ def findInverse(A, U, L):
         soln=substitution(U,L,b)
         inverse.append(soln)
     inverse=np.column_stack((inverse))
-    print("The inverse of the original matrix is")
-    print(inverse)
+
     return inverse
           
 
