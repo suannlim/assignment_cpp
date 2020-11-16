@@ -94,7 +94,6 @@ b - Solution matrix
 
 OUTPUT:
 x - Solution of matrix equation
-"""
 ```
 
 ```
