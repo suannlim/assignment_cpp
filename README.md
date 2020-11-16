@@ -4,7 +4,7 @@ This assignment has 5 questions that tests my understanding on the following top
 fourier transforms and ordinary differential equations. My submission is comprimised of 5 function scripts and one answer script (answerScript.py). 
 The answer script is split into blocks of code that are labelled with the respective question that they provide answers to. Please run the first block
 of code first to import all the necessary modules. Subsequently, all blocks of code must be run from top to bottom as some blocks may
-refer to pre defined variables.
+refer to pre defined variables. Some questions are not explicitly answered in answerScipt.py as those questions state "Write a routine" or "Write a function". These functions can be found in the question scripts, labelled with the question they are used for. 
 
 ## Getting Started
 
@@ -18,15 +18,14 @@ Matplotlib
 Numpy
 Scipy
 ```
-Matplotlib is required to plot the output data on graphs. Numpy and scipy are used for validation using in-built methods as well as using the fast fourier 
-numpy method for question 4.
+Matplotlib is required to plot the output data on graphs. Numpy and scipy are used for validation using in-built methods as well as using the Fast Fourier Transform method for Question 4.
 
 ### Obtaining solutions
 
 As stated earlier, the blocks of code must be run from top to bottom. The solutions will either be presented as graphs or numerical values and matrices 
 in the console. In the cases where the answers are printed into the console, there will be a string above that details what the answer refers to. In the 
 alternate case where the data is presented as a graph, the data points are colour coded in a legend. In the graphs titled "Validation", if there only
-appears to be a singular curve, this is because my function output and the in-built functions are exactly equal - thus providing validation.
+appears to be a singular curve, this is because my function output and the in-built functions are overlapping - providing validation.
 
 ## Question 1 - Floating Point Variables
 
