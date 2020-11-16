@@ -24,8 +24,10 @@ Matplotlib is required to plot the output data on graphs. Numpy and scipy are us
 
 As stated earlier, the blocks of code must be run from top to bottom. The solutions will either be presented as graphs or numerical values and matrices 
 in the console. In the cases where the answers are printed into the console, there will be a string above that details what the answer refers to. In the 
-alternate case where the data is presented as a graph, the data points are colour coded in a legend. In the graphs titled "Validation", if there only
-appears to be a singular curve, this is because my function output and the in-built functions are overlapping - providing validation.
+alternate case where the data is presented as a graph, the data points are colour coded in a legend. 
+
+### Validation
+When an output in the console is titled "True value" eg. true determinant, true next highest value. It is referring to the analytical solution or the value found by using an in-built method. These are printed for the user to compare the answers found by the functions written, to the true answers. Similarly for graphs, some graphs titled "Validation" has the output data plotted against the analytical solution or in-built function data to see if they overlap. If they do, it validates the methods written.
 
 ## Question 1 - Floating Point Variables
 
