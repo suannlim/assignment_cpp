@@ -5,10 +5,14 @@ by importing the relevant modules and running the functions.
 *IMPORTANT* 
 PLEASE RUN THE BLOCKS IN ORDER AS SOME QUESTIONS DEPEND ON PRE DEFINED 
 VARIABLES FOUND IN PREVIOUS BLOCKS.
+
+Please use the "run current cell" function whilst hovering over the desired
+cell, rather than running the entire script at once. These provides outputs
+for the answers one by one rather than all at once.
 """
 #%%
 """
-*PLEASE RUN THIS BLOCK TO IMPORT ALL RELEVANT MODULES*
+*PLEASE RUN THIS BLOCK FIRST TO IMPORT ALL RELEVANT MODULES*
 """
 import float_point_round_q1 as fpr
 import lu_decomp_q2 as lu
@@ -62,10 +66,15 @@ b=[[2],[5],[-4],[8],[9]]
 U=lu.lud(A)[0]
 L=lu.lud(A)[1]
 
+print("The upper matrix is")
+print(U)
+print("The lower matrix is")
+print(L)
+
 #validation to check that the multiplication of upper and lower matrix returns 
 #A
 original = np.dot(L,U)
-print("This should be the original input matrix")
+print("This matrix is L*U and should result in the original input matrix")
 print(original)
 
 #finding the determinant of A
@@ -83,7 +92,7 @@ print(mySolution)
 
 #Validating our solution using numpy
 solution=np.linalg.solve(A,b)
-print("The solution given by numpy is")
+print("The true solution given by NumPy is")
 print(solution)
 
 #%% Question 2e
@@ -94,7 +103,7 @@ print(myInverse)
 
 #Validating using numpy
 trueInverse=np.linalg.inv(A)
-print("The inverse given by numpy is")
+print("The true inverse given by numpy is")
 print(trueInverse)
 
 #%% question 3c
@@ -116,7 +125,7 @@ y_spline=inter.cubic_spline(X,Y)[1]
 
 #compare against scipy lagrange
 poly=lagrange(X,Y)
-new_X=np.arange(X[0],X[N-1],0.01)
+new_X=np.arange(X[0],X[N-1],0.001)
 Y_scipy=poly(new_X)
 
 
@@ -127,22 +136,25 @@ f=CubicSpline(X,Y,bc_type='natural')
 plt.figure(1)
 plt.title("Compare cubic spline method and lagrange method")
 plt.plot(x_spline,y_spline,label="Spline Interpolation")
+plt.plot(X,Y,"x",label="Data points")
 plt.plot(x_lagrange,y_lagrange,label="Lagrange approximation")
 plt.grid()
 plt.legend()
 
 #validating lagrange interpolation method
 plt.figure(2)
-plt.title("Lagrange interpolation vs Scipy Lagrange method")
+plt.title("Validation of Lagrange method")
 plt.plot(x_lagrange,y_lagrange,label="Lagrange")
+plt.plot(X,Y,"x",label="Data points")
 plt.plot(new_X,Y_scipy,label="Scipy Lagrange")
 plt.legend()
 plt.grid()
 
 #validating cubic spline method
 plt.figure(3)
-plt.title("Cubic spline vs Scipy Spline method")
+plt.title("Validation of Cubic Spline method")
 plt.plot(x_spline,y_spline, label="Spline")
+plt.plot(X,Y,"x",label="Data points")
 plt.plot(new_X,f(new_X),label="Scipy spline")
 plt.legend()
 plt.grid()
@@ -211,7 +223,7 @@ V_analytical=ode.analyticalSoln(t)
 trueAnswer=V_analytical[-1]
 print("The analytical answer is " + str(trueAnswer) + "V")
 
-
+#Plot the graph
 plt.figure(1)
 plt.title("ODE Solver")
 plt.grid()
@@ -245,7 +257,7 @@ print("The error for h=0.01 and h=0.02 is")
 print(error1,error2)
 
 
-
+#plot the graph
 plt.title("Comparing varying step size of RK4")
 plt.plot(t1,V1,label="RK4 step size 0.001")
 plt.plot(t2,V2,label="RK4 step size 0.002")
@@ -260,15 +272,16 @@ print("Please see graph produced")
 #Time period of square wave is RC/2
 t3=ode.OdeSolver(True,0,1,3,0.01,0,1,0.5,True)[0]
 V3=ode.OdeSolver(True,0,1,3,0.01,0,1,0.5,True)[1]
-answer3=ode.OdeSolver(True,0,1,3,0.01,0,2,0.5,True)[2]
+answer3=ode.OdeSolver(True,0,1,3,0.01,0,1,0.5,True)[2]
 print("The solution of Vout is " + str(answer3) + "V" + " for T=RC/2")
 
 #Time period of square wave is 2RC
-t4=ode.OdeSolver(True,0,1,3,0.001,0,1,2,True)[0]
-V4=ode.OdeSolver(True,0,1,3,0.001,0,1,2,True)[1]
-answer3=ode.OdeSolver(True,0,1,3,0.001,0,2,2,True)[2]
+t4=ode.OdeSolver(True,0,1,3,0.001,0,1,1,True)[0]
+V4=ode.OdeSolver(True,0,1,3,0.001,0,1,1,True)[1]
+answer3=ode.OdeSolver(True,0,1,3,0.001,0,1,1,True)[2]
 print("The solution of Vout is " + str(answer3) + "V" + " for T=2RC")
 
+#Plot the graph
 plt.title("Runge Kutta with Square Wave")
 plt.plot(t3,V3,label="RC/2 period")
 plt.plot(t4,V4,label="2RC period")
